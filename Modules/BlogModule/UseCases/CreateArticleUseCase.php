@@ -3,27 +3,27 @@
 namespace Modules\BlogModule\UseCases;
 
 use App\DTO\BaseUseCaseResultDTO;
-use App\UseCases\BaseUseCase;
 use Modules\BlogModule\DTO\ArticleInstanceDTO;
 use Modules\BlogModule\Entities\Article;
-use Modules\BlogModule\Repositories\ArticlesRepository;
 
 /**
  * Class CreateArticleUseCase
  * @package Modules\BlogModule\UseCases;
  */
-final class CreateArticleUseCase extends BaseUseCase
+final class CreateArticleUseCase extends BaseArticlesUseCase
 {
-
+    /**
+     * New article data
+     * @var array
+     */
     private array $article_data;
 
-    private ArticlesRepository $repository;
-
-    public function __construct(ArticlesRepository $repository)
-    {
-        $this->repository = $repository;
-    }
-
+    /**
+     * Set article data
+     *
+     * @param array $article_data
+     * @return $this
+     */
     public function setArticleData(array $article_data): self
     {
         $this->article_data = $article_data;
