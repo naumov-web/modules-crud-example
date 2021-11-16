@@ -53,8 +53,6 @@ paths:
             $ref: "#/definitions/DefaultErrorResponseModel"
         500:
           description: "Internal server error"
-          schema:
-            $ref: "#/definitions/ServerErrorResponseModel"
     post:
       tags:
         - "articles"
@@ -82,8 +80,6 @@ paths:
             $ref: "#/definitions/DefaultErrorResponseModel"
         500:
           description: "Internal server error"
-          schema:
-            $ref: "#/definitions/ServerErrorResponseModel"
 
   /blog-module/articles/{article}:
     get:
@@ -106,12 +102,8 @@ paths:
             $ref: "#/definitions/ArticleDetailResponseModel"
         404:
           description: "Not found error"
-          schema:
-            $ref: "#/definitions/NotFoundResponseModel"
         500:
           description: "Internal server error"
-          schema:
-            $ref: "#/definitions/ServerErrorResponseModel"
     put:
       tags:
         - "articles"
@@ -140,12 +132,12 @@ paths:
             $ref: "#/definitions/ArticleDetailResponseModel"
         404:
           description: "Not found error"
+        422:
+          description: "Validation error"
           schema:
-            $ref: "#/definitions/NotFoundResponseModel"
+            $ref: "#/definitions/DefaultErrorResponseModel"
         500:
           description: "Internal server error"
-          schema:
-            $ref: "#/definitions/ServerErrorResponseModel"
     delete:
       tags:
         - "articles"
@@ -166,12 +158,8 @@ paths:
             $ref: "#/definitions/SimpleSuccessResponseModel"
         404:
           description: "Not found error"
-          schema:
-            $ref: "#/definitions/NotFoundResponseModel"
         500:
           description: "Internal server error"
-          schema:
-            $ref: "#/definitions/ServerErrorResponseModel"
 
 definitions:
 
