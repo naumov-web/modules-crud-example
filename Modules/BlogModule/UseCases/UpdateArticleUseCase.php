@@ -7,16 +7,35 @@ use Modules\BlogModule\DTO\ArticleInstanceUseCaseResultDTO;
 use Modules\BlogModule\Entities\Article;
 
 /**
- * Class CreateArticleUseCase
- * @package Modules\BlogModule\UseCases;
+ * Class UpdateArticleUseCase
+ * @package Modules\BlogModule\UseCases
  */
-final class CreateArticleUseCase extends BaseArticlesUseCase
+final class UpdateArticleUseCase extends BaseArticlesUseCase
 {
+    /**
+     * Article instance
+     * @var Article
+     */
+    private Article $article;
+
     /**
      * New article data
      * @var array
      */
     private array $article_data;
+
+    /**
+     * Set article instance
+     *
+     * @param Article $article
+     * @return $this
+     */
+    public function setArticle(Article $article): self
+    {
+        $this->article = $article;
+
+        return $this;
+    }
 
     /**
      * Set article data
@@ -36,10 +55,10 @@ final class CreateArticleUseCase extends BaseArticlesUseCase
      */
     public function execute(): BaseUseCaseResultDTO
     {
-        /**
-         * @var Article $article
-         */
-        $article = $this->repository->store($this->article_data);
+        $article = $this->repository->update(
+            $this->article,
+            $this->article_data
+        );
 
         return new ArticleInstanceUseCaseResultDTO($article);
     }

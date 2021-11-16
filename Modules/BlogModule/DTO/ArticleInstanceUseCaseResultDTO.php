@@ -6,10 +6,10 @@ use App\DTO\BaseUseCaseResultDTO;
 use Modules\BlogModule\Entities\Article;
 
 /**
- * Class ArticleInstanceDTO
+ * Class ArticleInstanceUseCaseResultDTO
  * @package Modules\BlogModule\DTO
  */
-final class ArticleInstanceDTO extends BaseUseCaseResultDTO
+final class ArticleInstanceUseCaseResultDTO extends BaseUseCaseResultDTO
 {
     /**
      * Article instance
@@ -18,7 +18,7 @@ final class ArticleInstanceDTO extends BaseUseCaseResultDTO
     private Article $article;
 
     /**
-     * ArticleInstanceDTO constructor
+     * ArticleInstanceUseCaseResultDTO constructor
      * @param Article $article
      */
     public function __construct(Article $article)

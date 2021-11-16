@@ -6,16 +6,18 @@ use App\DTO\ListItemsUseCaseResultDTO;
 use App\Http\Resources\Api\ListResource;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\JsonResponse;
-use Modules\BlogModule\DTO\ArticleInstanceDTO;
+use Modules\BlogModule\DTO\ArticleInstanceUseCaseResultDTO;
 use Modules\BlogModule\Entities\Article;
 use Modules\BlogModule\Http\Controllers\BaseController;
 use Modules\BlogModule\Http\Requests\Api\Articles\CreateArticleRequest;
 use Modules\BlogModule\Http\Requests\Api\Articles\GetArticlesRequest;
+use Modules\BlogModule\Http\Requests\Api\Articles\UpdateArticleRequest;
 use Modules\BlogModule\Http\Resources\Api\Articles\ArticleDetailResource;
 use Modules\BlogModule\Http\Resources\Api\Articles\ArticleResource;
 use Modules\BlogModule\UseCases\CreateArticleUseCase;
 use Modules\BlogModule\UseCases\DeleteArticleUseCase;
 use Modules\BlogModule\UseCases\GetArticlesUseCase;
+use Modules\BlogModule\UseCases\UpdateArticleUseCase;
 
 /**
  * Class ArticlesController
@@ -38,7 +40,7 @@ final class ArticlesController extends BaseController
         $use_case = app()->make(CreateArticleUseCase::class);
 
         /**
-         * @var ArticleInstanceDTO $article_dto
+         * @var ArticleInstanceUseCaseResultDTO $article_dto
          */
         $article_dto = $use_case
             ->setArticleData($request->only(['title', 'content']))
@@ -76,6 +78,35 @@ final class ArticlesController extends BaseController
             $items_dto->getModels(),
             $items_dto->getCount()
         );
+    }
+
+    /**
+     * Update specific article
+     *
+     * @param UpdateArticleRequest $request
+     * @param Article $article
+     * @return JsonResponse
+     * @throws BindingResolutionException
+     */
+    public function update(UpdateArticleRequest $request, Article $article): JsonResponse
+    {
+        /**
+         * @var UpdateArticleUseCase $use_case
+         */
+        $use_case = app()->make(UpdateArticleUseCase::class);
+
+        /**
+         * @var ArticleInstanceUseCaseResultDTO $result_dto
+         */
+        $result_dto = $use_case
+            ->setArticle($article)
+            ->setArticleData($request->only(['title', 'content']))
+            ->execute();
+
+        return response()->json([
+            'success' => true,
+            'article' => new ArticleDetailResource($result_dto->getArticle())
+        ]);
     }
 
     /**
