@@ -17,6 +17,7 @@ use Modules\BlogModule\Http\Resources\Api\Articles\ArticleResource;
 use Modules\BlogModule\UseCases\CreateArticleUseCase;
 use Modules\BlogModule\UseCases\DeleteArticleUseCase;
 use Modules\BlogModule\UseCases\GetArticlesUseCase;
+use Modules\BlogModule\UseCases\ShowArticleUseCase;
 use Modules\BlogModule\UseCases\UpdateArticleUseCase;
 
 /**
@@ -127,6 +128,33 @@ final class ArticlesController extends BaseController
 
         return response()->json([
             'success' => $result_dto->getIsSuccess()
+        ]);
+    }
+
+    /**
+     * Show specific article details
+     *
+     * @param Article $article
+     * @return JsonResponse
+     * @throws BindingResolutionException
+     */
+    public function show(Article $article): JsonResponse
+    {
+        /**
+         * @var ShowArticleUseCase $use_case
+         */
+        $use_case = app()->make(ShowArticleUseCase::class);
+
+        /**
+         * @var ArticleInstanceUseCaseResultDTO $result_dto
+         */
+        $result_dto = $use_case
+            ->setArticle($article)
+            ->execute();
+
+        return response()->json([
+            'success' => true,
+            'article' => new ArticleDetailResource($result_dto->getArticle())
         ]);
     }
 }
