@@ -1,0 +1,274 @@
+swagger: "2.0"
+info:
+  title: "Modules Example API"
+  description: "Docs for Modules Example API"
+  version: "1.0.0"
+schemes:
+  - "http"
+host: 127.0.0.1:31080
+basePath: /api
+
+paths:
+
+  /blog-module/articles:
+    get:
+      tags:
+        - "articles"
+      summary: "Get articles list"
+      description: ""
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "limit"
+          type: "integer"
+          description: "Limit of items in response"
+        - in: "query"
+          name: "offset"
+          type: "integer"
+          description: "Offset of items in response"
+        - in: "query"
+          name: "sort_by"
+          type: "string"
+          description: "Sort by column"
+          enum:
+            - id
+            - title
+            - created_at
+        - in: "query"
+          name: "sort_direction"
+          type: "string"
+          description: "Sort direction"
+          enum:
+            - asc
+            - desc
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/ArticlesListResponseModel"
+        422:
+          description: "Validation error"
+          schema:
+            $ref: "#/definitions/DefaultErrorResponseModel"
+        500:
+          description: "Internal server error"
+          schema:
+            $ref: "#/definitions/ServerErrorResponseModel"
+    post:
+      tags:
+        - "articles"
+      summary: "Create new article"
+      description: ""
+      produces:
+        - "application/json"
+      consumes:
+        - "application/json"
+      parameters:
+        - name: "CreateArticleRequestBody"
+          in: "body"
+          description: "Create article request body"
+          required: true
+          schema:
+            $ref: "#/definitions/CreateArticleRequestModel"
+      responses:
+        201:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/ArticleDetailResponseModel"
+        422:
+          description: "Validation error"
+          schema:
+            $ref: "#/definitions/DefaultErrorResponseModel"
+        500:
+          description: "Internal server error"
+          schema:
+            $ref: "#/definitions/ServerErrorResponseModel"
+
+  /blog-module/articles/{article}:
+    get:
+      tags:
+        - "articles"
+      summary: "Get detail article info"
+      description: ""
+      produces:
+        - "application/json"
+      parameters:
+        - in: path
+          name: article
+          required: true
+          description: "Id of article"
+          type: integer
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/ArticleDetailResponseModel"
+        404:
+          description: "Not found error"
+          schema:
+            $ref: "#/definitions/NotFoundResponseModel"
+        500:
+          description: "Internal server error"
+          schema:
+            $ref: "#/definitions/ServerErrorResponseModel"
+    put:
+      tags:
+        - "articles"
+      summary: "Update specific article"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: path
+          name: article
+          required: true
+          description: "Id of article"
+          type: integer
+        - name: "UpdateArticleRequestBody"
+          in: "body"
+          description: "Update article request body"
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateArticleRequestModel"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/ArticleDetailResponseModel"
+        404:
+          description: "Not found error"
+          schema:
+            $ref: "#/definitions/NotFoundResponseModel"
+        500:
+          description: "Internal server error"
+          schema:
+            $ref: "#/definitions/ServerErrorResponseModel"
+    delete:
+      tags:
+        - "articles"
+      summary: "Delete specific article"
+      description: ""
+      produces:
+        - "application/json"
+      parameters:
+        - in: path
+          name: article
+          required: true
+          description: "Id of article"
+          type: integer
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/SimpleSuccessResponseModel"
+        404:
+          description: "Not found error"
+          schema:
+            $ref: "#/definitions/NotFoundResponseModel"
+        500:
+          description: "Internal server error"
+          schema:
+            $ref: "#/definitions/ServerErrorResponseModel"
+
+definitions:
+
+  SimpleSuccessResponseModel:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+
+  NotFoundResponseModel:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+      message:
+        type: "string"
+
+  DefaultErrorResponseModel:
+    type: "object"
+    properties:
+      errors:
+        type: "object"
+
+  ServerErrorResponseModel:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+      message:
+        type: "string"
+
+  ArticlesListResponseModel:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+      count:
+        type: "integer"
+      items:
+        type: "array"
+        items:
+          $ref: "#/definitions/ArticleDataResponseModel"
+
+  ArticleDataResponseModel:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      title:
+        type: "string"
+      content:
+        type: "string"
+      created_at:
+        type: "string"
+      updated_at:
+        type: "string"
+
+  CreateArticleRequestModel:
+    type: "object"
+    required:
+      - "title"
+      - "content"
+    properties:
+      title:
+        type: "string"
+      content:
+        type: "string"
+
+  ArticleDetailResponseModel:
+    type: "object"
+    properties:
+      success:
+        type: "boolean"
+      article:
+        $ref: "#/definitions/ArticleDetailDataResponseModel"
+
+  ArticleDetailDataResponseModel:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      title:
+        type: "string"
+      content:
+        type: "string"
+      created_at:
+        type: "string"
+      updated_at:
+        type: "string"
+
+  UpdateArticleRequestModel:
+    type: "object"
+    required:
+      - "title"
+      - "content"
+    properties:
+      title:
+        type: "string"
+      content:
+        type: "string"

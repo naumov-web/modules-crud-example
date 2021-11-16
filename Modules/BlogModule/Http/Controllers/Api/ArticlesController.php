@@ -6,6 +6,7 @@ use App\DTO\ListItemsUseCaseResultDTO;
 use App\Http\Resources\Api\ListResource;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Modules\BlogModule\DTO\ArticleInstanceUseCaseResultDTO;
 use Modules\BlogModule\Entities\Article;
 use Modules\BlogModule\Http\Controllers\BaseController;
@@ -47,10 +48,13 @@ final class ArticlesController extends BaseController
             ->setArticleData($request->only(['title', 'content']))
             ->execute();
 
-        return response()->json([
-            'success' => true,
-            'article' => new ArticleDetailResource($article_dto->getArticle())
-        ]);
+        return response()->json(
+            [
+                'success' => true,
+                'article' => new ArticleDetailResource($article_dto->getArticle())
+            ],
+            Response::HTTP_CREATED
+        );
     }
 
     /**
